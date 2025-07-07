@@ -73,7 +73,7 @@ def ftp_write_file(path: str, file: str, content: str) -> bool:
 
 # Check all the YAML config files are valid 
 # via POST /api/config/core/check_config
-def check_config() -> bool:
+def api_check_config() -> bool:
     """Check if the Home Assistant configuration is valid."""
     
     headers = {
@@ -91,8 +91,8 @@ def check_config() -> bool:
         print(f"Error checking configuration: {e}")
         return False
 
-#  Reload automation YAML files via POST /api/services/automation/reload
-def reload_automations() -> bool:
+#  Reload automation YAML files via POST /api/services/homeassistant/reload_all
+def api_reload_automations() -> bool:
     """Reload automations in Home Assistant."""
     
     headers = {
@@ -100,7 +100,7 @@ def reload_automations() -> bool:
         "Content-Type": "application/json",
     }
     try:
-        response = requests.post(f"{HA_URL}/api/services/automation/reload", headers=headers)
+        response = requests.post(f"{HA_URL}/api/services/homeassistant/reload_all", headers=headers)
         if response.status_code == 200:
             return True
         else:
@@ -151,27 +151,24 @@ async def list_files(path: str) -> str:
     return "\n".join(files)
 
 @mcp.tool()
-async def read_file(path: str, file: str) -> str:
-    """View the file content.
-
-    Args:
-        path: path of the file (e.g. config/)
-        file: name of the file to view (e.g. automations.yaml)
-    """
+async def read_file() -> str:
+    """View the content of config/automations.yaml."""
+    path = "config"
+    file = "automations.yaml"
     content = ftp_read_file(path, file)
     if not content:
         return f"File {file} not found in {path}"
     return content
 
 @mcp.tool()
-async def write_file(path: str, file: str, content: str) -> str:
-    """Write content to a file.
+async def write_file(content: str) -> str:
+    """Write content to config/automations.yaml.
 
     Args:
-        path: path of the file (e.g. config/)
-        file: name of the file to write (e.g. automations.yaml)
         content: content to write to the file
     """
+    path = "config"
+    file = "automations.yaml"
     success = ftp_write_file(path, file, content)
     if success:
         return f"File {file} written successfully to {path}"
@@ -181,7 +178,7 @@ async def write_file(path: str, file: str, content: str) -> str:
 @mcp.tool()
 async def check_config() -> str:
     """Check if the Home Assistant configuration is valid."""
-    if check_config():
+    if api_check_config():
         return "Configuration is valid."
     else:
         return "Configuration is invalid."
@@ -189,7 +186,7 @@ async def check_config() -> str:
 @mcp.tool()
 async def reload_automations() -> str:
     """Reload automations in Home Assistant."""
-    if reload_automations():
+    if api_reload_automations():
         return "Automations reloaded successfully."
     else:
         return "Failed to reload automations."
