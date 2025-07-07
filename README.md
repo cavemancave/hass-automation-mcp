@@ -1,36 +1,39 @@
-# Home Assistant Automation Control MCP server
+# Home Assistant Automation Management MCP server
 
-This project is used to control automation in Home Assistant by Model Context Protocol (MCP).
+This project is used to manage automations in Home Assistant by Model Context Protocol (MCP).
 
 The solution is to wrap an FTP client in it, to list/read/write YAML files.
 
 Then use API to trigger reload.
 
 # Use Guide
+1. Install [uv](https://github.com/astral-sh/uv) and [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) if not already installed.
 
-1. Install FTP server in Home Assistant  
+2. Install FTP server in Home Assistant  
    Settings -> Addons -> FTP -> Install
 
-2. Configure FTP server username and password, enable operation permission and folder permission.
+3. Configure FTP server username and password, enable operation permission and folder permission.  
+   Settings -> Addons -> FTP -> Configuration
 
-3. Get Long Live Token  
+4. Get Long Live Token  
    User -> Security -> Long Live Token -> Create
 
-4. Test FTP connection
+5. Test FTP connection
 
-5. Download this repo, configure environment file  
+6. Download this repo, configure environment file  
    ```bash
+   git clone https://github.com/cavemancave/hass-automation-mcp.git
    cp .env.example .env
+   # change .env
    ```
-   Change content in it.
 
-6. Change path in `claude_desktop_config.json`, test it by inspector  
+7. Change path in `claude_desktop_config.json`, test it by inspector  
    ```bash
    npx @modelcontextprotocol/inspector --config claude_desktop_config.json --server hass-automation-mcp
    ```
    Connect -> list tools -> list files -> config/ -> run tool
 
-7. Merge `claude_desktop_config.json` into your LLM configuration
+8. Merge `claude_desktop_config.json` into your LLM configuration
 
 # Trouble Shooting
 
