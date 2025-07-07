@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "hass-automation-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/home/taishan/code/hass-automation-mcp",
+        "run",
+        "main.py"
+      ]
+    }
+  }
+}
